@@ -1,5 +1,6 @@
 package com.nexus.hr.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +15,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Entity
 public class Employee {
@@ -23,17 +26,30 @@ public class Employee {
 	private Long id;
 
 	private String firstName;
+
 	private String lastName;
 
 	private String email;
+
 	private String phone;
+
 	private int age;
 
+	// GENDER
+	private String gender;
+
 	private String aadhaarNo;
+
 	private String panNo;
 
 	private double salary;
+
 	private String designation;
+
+	// AUDIT FIELDS
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id")
@@ -44,11 +60,31 @@ public class Employee {
 	private EmployeeProfile profile;
 
 	@ManyToMany
-	@JoinTable(name = "employee_project", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "project_id"))
+	@JoinTable(name = "employee_project",
+
+			joinColumns = @JoinColumn(name = "employee_id"),
+
+			inverseJoinColumns = @JoinColumn(name = "project_id"))
 	private List<Project> projects;
 
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<LeaveRequest> leaveRequests;
+
+	// AUTO TIMESTAMP
+
+	@PrePersist
+	public void onCreate() {
+
+		this.createdAt = LocalDateTime.now();
+
+		this.updatedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+
+		this.updatedAt = LocalDateTime.now();
+	}
 
 	// GETTERS & SETTERS
 
@@ -57,6 +93,7 @@ public class Employee {
 	}
 
 	public void setId(Long id) {
+
 		this.id = id;
 	}
 
@@ -65,6 +102,7 @@ public class Employee {
 	}
 
 	public void setFirstName(String firstName) {
+
 		this.firstName = firstName;
 	}
 
@@ -73,6 +111,7 @@ public class Employee {
 	}
 
 	public void setLastName(String lastName) {
+
 		this.lastName = lastName;
 	}
 
@@ -81,6 +120,7 @@ public class Employee {
 	}
 
 	public void setEmail(String email) {
+
 		this.email = email;
 	}
 
@@ -89,6 +129,7 @@ public class Employee {
 	}
 
 	public void setPhone(String phone) {
+
 		this.phone = phone;
 	}
 
@@ -97,7 +138,19 @@ public class Employee {
 	}
 
 	public void setAge(int age) {
+
 		this.age = age;
+	}
+
+	// GENDER
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+
+		this.gender = gender;
 	}
 
 	public String getAadhaarNo() {
@@ -105,6 +158,7 @@ public class Employee {
 	}
 
 	public void setAadhaarNo(String aadhaarNo) {
+
 		this.aadhaarNo = aadhaarNo;
 	}
 
@@ -113,6 +167,7 @@ public class Employee {
 	}
 
 	public void setPanNo(String panNo) {
+
 		this.panNo = panNo;
 	}
 
@@ -121,6 +176,7 @@ public class Employee {
 	}
 
 	public void setSalary(double salary) {
+
 		this.salary = salary;
 	}
 
@@ -129,7 +185,26 @@ public class Employee {
 	}
 
 	public void setDesignation(String designation) {
+
 		this.designation = designation;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+
+		this.updatedAt = updatedAt;
 	}
 
 	public Department getDepartment() {
@@ -137,6 +212,7 @@ public class Employee {
 	}
 
 	public void setDepartment(Department department) {
+
 		this.department = department;
 	}
 
@@ -145,6 +221,7 @@ public class Employee {
 	}
 
 	public void setProfile(EmployeeProfile profile) {
+
 		this.profile = profile;
 	}
 
@@ -153,6 +230,7 @@ public class Employee {
 	}
 
 	public void setProjects(List<Project> projects) {
+
 		this.projects = projects;
 	}
 
@@ -161,15 +239,39 @@ public class Employee {
 	}
 
 	public void setLeaveRequests(List<LeaveRequest> leaveRequests) {
+
 		this.leaveRequests = leaveRequests;
 	}
 
-	// SAFE toString (IMPORTANT)
+	// SAFE TOSTRING
 
 	@Override
 	public String toString() {
-		return "Employee{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
-				+ ", email='" + email + '\'' + ", phone='" + phone + '\'' + ", age=" + age + ", salary=" + salary
-				+ ", designation='" + designation + '\'' + '}';
+
+		return "Employee{"
+
+				+ "id=" + id
+
+				+ ", firstName='" + firstName + '\''
+
+				+ ", lastName='" + lastName + '\''
+
+				+ ", email='" + email + '\''
+
+				+ ", phone='" + phone + '\''
+
+				+ ", gender='" + gender + '\''
+
+				+ ", age=" + age
+
+				+ ", salary=" + salary
+
+				+ ", designation='" + designation + '\''
+
+				+ ", createdAt=" + createdAt
+
+				+ ", updatedAt=" + updatedAt
+
+				+ '}';
 	}
 }

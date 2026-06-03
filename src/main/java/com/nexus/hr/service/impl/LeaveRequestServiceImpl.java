@@ -26,6 +26,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
 	public LeaveRequestServiceImpl(LeaveRequestRepository leaveRepo, EmployeeRepository empRepo,
 			LeaveBalanceService balanceService) {
+
 		this.leaveRepo = leaveRepo;
 		this.empRepo = empRepo;
 		this.balanceService = balanceService;
@@ -40,6 +41,12 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 		LeaveRequest leave = LeaveRequestMapper.mapToEntity(dto, emp);
 
 		leave.setStatus(LeaveStatus.PENDING);
+
+		// optional auto days calculation (safe)
+		if (dto.getFromDate() != null && dto.getToDate() != null) {
+			int days = (int) ChronoUnit.DAYS.between(dto.getFromDate(), dto.getToDate()) + 1;
+			leave.setDays(days);
+		}
 
 		return LeaveRequestMapper.mapToDTO(leaveRepo.save(leave));
 	}
@@ -74,14 +81,16 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
 		leave.setStatus(newStatus);
 
-		// AUTO BALANCE UPDATE
 		if (newStatus == LeaveStatus.APPROVED) {
 
-			int days = (int) ChronoUnit.DAYS.between(leave.getFromDate(), leave.getToDate());
+			int days = (int) ChronoUnit.DAYS.between(leave.getFromDate(), leave.getToDate()) + 1;
 
 			leave.setDays(days);
 
-			balanceService.updateAfterLeaveApproval(leave.getEmployee().getId(), leave.getLeaveType(), days);
+			// safe call
+			if (balanceService != null) {
+				balanceService.updateAfterLeaveApproval(leave.getEmployee().getId(), leave.getLeaveType(), days);
+			}
 		}
 
 		return LeaveRequestMapper.mapToDTO(leaveRepo.save(leave));

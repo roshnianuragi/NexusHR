@@ -1,12 +1,6 @@
 package com.nexus.hr.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class LeaveBalance {
@@ -23,10 +17,7 @@ public class LeaveBalance {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "employee_id")
-	@com.fasterxml.jackson.annotation.JsonIgnore
 	private Employee employee;
-
-	// GETTERS & SETTERS
 
 	public Long getId() {
 		return id;
@@ -74,13 +65,5 @@ public class LeaveBalance {
 
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
-	}
-
-	// SAFE toString
-
-	@Override
-	public String toString() {
-		return "LeaveBalance{" + "id=" + id + ", totalCL=" + totalCL + ", usedCL=" + usedCL + ", totalPL=" + totalPL
-				+ ", usedPL=" + usedPL + '}';
 	}
 }

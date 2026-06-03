@@ -18,7 +18,7 @@ public class LeaveRequest {
 	private LocalDate fromDate;
 	private LocalDate toDate;
 
-	// ✅ FIX: added missing fields
+	// FIX: added missing fields
 	private String leaveType;
 
 	private Integer days;

@@ -3,16 +3,11 @@ package com.nexus.hr.dto;
 public class LeaveBalanceDTO {
 
 	private Long id;
-
 	private int totalCL;
 	private int usedCL;
-
 	private int totalPL;
 	private int usedPL;
-
 	private Long employeeId;
-
-	// GETTERS & SETTERS
 
 	public Long getId() {
 		return id;

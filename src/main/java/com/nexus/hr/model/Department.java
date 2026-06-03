@@ -1,14 +1,9 @@
 package com.nexus.hr.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class Department {
@@ -29,9 +24,31 @@ public class Department {
 
 	private boolean active = true;
 
+	// AUDIT FIELDS
+
+	private LocalDateTime createdAt;
+
+	private LocalDateTime updatedAt;
+
 	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	private List<Employee> employees;
+
+	// AUTO TIMESTAMP
+
+	@PrePersist
+	public void onCreate() {
+
+		this.createdAt = LocalDateTime.now();
+
+		this.updatedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+
+		this.updatedAt = LocalDateTime.now();
+	}
 
 	// GETTERS & SETTERS
 
@@ -99,12 +116,51 @@ public class Department {
 		this.employees = employees;
 	}
 
-	// toString
+	// CREATED AT
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	// UPDATED AT
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	// TOSTRING
 
 	@Override
 	public String toString() {
-		return "Department{" + "id=" + id + ", name='" + name + '\'' + ", location='" + location + '\'' + ", budget="
-				+ budget + ", description='" + description + '\'' + ", headOfDepartment='" + headOfDepartment + '\''
-				+ ", active=" + active + '}';
+
+		return "Department{"
+
+				+ "id=" + id
+
+				+ ", name='" + name + '\''
+
+				+ ", location='" + location + '\''
+
+				+ ", budget=" + budget
+
+				+ ", description='" + description + '\''
+
+				+ ", headOfDepartment='" + headOfDepartment + '\''
+
+				+ ", active=" + active
+
+				+ ", createdAt=" + createdAt
+
+				+ ", updatedAt=" + updatedAt
+
+				+ '}';
 	}
 }

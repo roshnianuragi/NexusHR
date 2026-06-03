@@ -4,9 +4,9 @@ import com.nexus.hr.dto.LeaveBalanceDTO;
 
 public interface LeaveBalanceService {
 
-	LeaveBalanceDTO getByEmployeeId(Long employeeId);
+    LeaveBalanceDTO getByEmployeeId(Long employeeId);
 
-	LeaveBalanceDTO createOrUpdateBalance(LeaveBalanceDTO dto);
+    LeaveBalanceDTO createOrUpdateBalance(LeaveBalanceDTO dto);
 
-	void updateAfterLeaveApproval(Long employeeId, String leaveType, int days);
+    void updateAfterLeaveApproval(Long employeeId, String leaveType, int days);
 }

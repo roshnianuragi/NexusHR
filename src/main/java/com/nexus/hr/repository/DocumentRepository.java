@@ -9,6 +9,5 @@ import com.nexus.hr.model.Employee;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 
-	// THIS IS REQUIRED
 	List<Document> findByEmployee(Employee employee);
 }

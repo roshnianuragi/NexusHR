@@ -22,31 +22,63 @@ public class ProjectController {
 	// CREATE PROJECT
 	@PostMapping
 	public ProjectDTO create(@Valid @RequestBody ProjectDTO dto) {
+
 		return service.create(dto);
 	}
 
 	// GET BY ID
 	@GetMapping("/{id}")
 	public ProjectDTO getById(@PathVariable Long id) {
+
 		return service.getById(id);
 	}
 
 	// GET ALL
 	@GetMapping
 	public List<ProjectDTO> getAll() {
+
 		return service.getAll();
 	}
 
-	// UPDATE PROJECT
+	// UPDATE
 	@PutMapping("/{id}")
 	public ProjectDTO update(@PathVariable Long id, @Valid @RequestBody ProjectDTO dto) {
+
 		return service.update(id, dto);
 	}
 
-	// DELETE PROJECT
+	// DELETE
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable Long id) {
+
 		service.delete(id);
+
 		return "Project deleted successfully";
+	}
+
+	// ASSIGN EMPLOYEES
+	@PostMapping("/{projectId}/assign")
+	public String assignEmployees(
+
+			@PathVariable Long projectId,
+
+			@RequestBody List<Long> employeeIds) {
+
+		service.assignEmployees(projectId, employeeIds);
+
+		return "Employees assigned successfully";
+	}
+
+	// REMOVE EMPLOYEE
+	@DeleteMapping("/{projectId}/employees/{employeeId}")
+	public String removeEmployee(
+
+			@PathVariable Long projectId,
+
+			@PathVariable Long employeeId) {
+
+		service.removeEmployee(projectId, employeeId);
+
+		return "Employee removed from project";
 	}
 }

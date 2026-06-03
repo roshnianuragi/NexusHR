@@ -33,4 +33,7 @@ public interface EmployeeService {
 	List<EmployeeDTO> searchEmployees(String name);
 
 	long countEmployeesByDepartment(Long departmentId);
+
+	Page<EmployeeDTO> searchEmployees(String name, Long departmentId, String designation, Double minSalary,
+			Double maxSalary, Pageable pageable);
 }

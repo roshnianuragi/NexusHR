@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/leaves")
-public class LeaveRequestController {
+public class LeaveRequestController {	
 
 	private final LeaveRequestService leaveRequestService;
 

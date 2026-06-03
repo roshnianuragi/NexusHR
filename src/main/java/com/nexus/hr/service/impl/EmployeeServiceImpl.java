@@ -18,6 +18,9 @@ import com.nexus.hr.model.Employee;
 import com.nexus.hr.repository.DepartmentRepository;
 import com.nexus.hr.repository.EmployeeRepository;
 import com.nexus.hr.service.EmployeeService;
+import org.springframework.data.jpa.domain.Specification;
+
+import com.nexus.hr.specification.EmployeeSpecification;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -91,6 +94,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (dto.getPhone() != null)
 			emp.setPhone(dto.getPhone());
 
+		if (dto.getGender() != null)
+			emp.setGender(dto.getGender());
+
 		if (dto.getAge() != 0)
 			emp.setAge(dto.getAge());
 
@@ -160,5 +166,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public long countEmployeesByDepartment(Long departmentId) {
 
 		return employeeRepository.countByDepartmentId(departmentId);
+	}
+
+	@Override
+	public Page<EmployeeDTO> searchEmployees(
+
+			String name, Long departmentId, String designation, Double minSalary, Double maxSalary, Pageable pageable) {
+
+		Specification<Employee> spec = Specification.where(EmployeeSpecification.hasName(name))
+
+				.and(EmployeeSpecification.hasDepartment(departmentId))
+
+				.and(EmployeeSpecification.hasDesignation(designation))
+
+				.and(EmployeeSpecification.hasMinSalary(minSalary))
+
+				.and(EmployeeSpecification.hasMaxSalary(maxSalary));
+
+		Page<Employee> employees = employeeRepository.findAll(spec, pageable);
+
+		return employees.map(EmployeeMapper::mapToDTO);
 	}
 }

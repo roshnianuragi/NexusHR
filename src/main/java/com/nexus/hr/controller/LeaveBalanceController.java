@@ -15,13 +15,13 @@ public class LeaveBalanceController {
 		this.service = service;
 	}
 
-	// GET BY EMPLOYEE ID
-	@GetMapping("/{employeeId}")
+	// GET BALANCE
+	@GetMapping("/employee/{employeeId}")
 	public LeaveBalanceDTO getByEmployeeId(@PathVariable Long employeeId) {
 		return service.getByEmployeeId(employeeId);
 	}
 
-	// CREATE OR UPDATE
+	// CREATE / UPDATE BALANCE
 	@PostMapping
 	public LeaveBalanceDTO createOrUpdate(@RequestBody LeaveBalanceDTO dto) {
 		return service.createOrUpdateBalance(dto);
